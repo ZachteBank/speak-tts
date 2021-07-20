@@ -53,4 +53,9 @@ export default class Speech {
     static paused(): boolean;
 
     static speaking(): boolean;
+
+    static queueUtterances(): number;
+    static getCurrentUtterance(): SpeechSynthesisUtterance;
+    static getCurrentUtteranceIndex(): number;
+
 }
