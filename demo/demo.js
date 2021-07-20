@@ -64,6 +64,7 @@ function _prepareSpeakButton(speech) {
 				}
 			}
 		}).then((data) => {
+			console.log(speech.queueUtterances(), "Total utterances")
 			console.log("Success !", data)
 		}).catch(e => {
 			console.error("An error occurred :", e)
