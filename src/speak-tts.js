@@ -194,8 +194,6 @@ class SpeakTTS {
                     utterance[listener] = newListener
                 })
                 this.utterances.push(utterance)
-                this.currentUtterance = utterance;
-                this.currentUtteranceIndex = index;
                 speechSynthesis.speak(utterance)
             })
         })

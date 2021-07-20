@@ -52,6 +52,7 @@ function _prepareSpeakButton(speech) {
 			listeners: {
 				onstart: () => {
 					console.log("Start utterance")
+					console.log(speech.queueUtterances(), "Total utterances")
 				},
 				onend: () => {
 					console.log("End utterance")
