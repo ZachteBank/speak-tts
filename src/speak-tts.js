@@ -186,6 +186,7 @@ class SpeakTTS {
                             })
                         }
                         if (listener === 'onend') {
+                            console.log(utterance, "On end utterance")
                             this.currentUtterance = utterance;
                             if (isLast) resolve({
                                 constUtterancesHolder,
@@ -234,7 +235,9 @@ class SpeakTTS {
     }
 
     getCurrentUtteranceIndex() {
-        return this.utterances.findIndex(this.currentUtterance);
+        return this.utterances.findIndex((row) => {
+            return row.text === this.currentUtterance.text
+        });
     }
 }
 
