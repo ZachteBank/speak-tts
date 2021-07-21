@@ -178,6 +178,7 @@ class SpeakTTS {
                     const newListener = (data) => {
                         fn && fn(data)
                         if (listener === 'onerror') {
+                            this.currentUtterance = utterance;
                             reject({
                                 constUtterancesHolder,
                                 lastUtterance: utterance,
@@ -185,6 +186,7 @@ class SpeakTTS {
                             })
                         }
                         if (listener === 'onend') {
+                            this.currentUtterance = utterance;
                             if (isLast) resolve({
                                 constUtterancesHolder,
                                 lastUtterance: utterance
@@ -232,7 +234,7 @@ class SpeakTTS {
     }
 
     getCurrentUtteranceIndex() {
-        return this.currentUtteranceIndex;
+        return this.utterances.findIndex(this.currentUtterance);
     }
 }
 
