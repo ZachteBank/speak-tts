@@ -158,6 +158,7 @@ class SpeakTTS {
             // Split into sentences (for better result and bug with some versions of chrome)
             this.utterances = []
             const constUtterancesHolder = this.utterances;
+            let reservedThis = this;
 
             const sentences = this.splitSentences
                 ? splitSentences(msg)
@@ -178,7 +179,7 @@ class SpeakTTS {
                     const newListener = (data) => {
                         fn && fn(data)
                         if (listener === 'onerror') {
-                            this.currentUtterance = utterance;
+                            reservedThis.currentUtterance = utterance;
                             reject({
                                 constUtterancesHolder,
                                 lastUtterance: utterance,
@@ -186,8 +187,7 @@ class SpeakTTS {
                             })
                         }
                         if (listener === 'onend') {
-                            console.log(utterance, "On end utterance")
-                            this.currentUtterance = utterance;
+                            reservedThis.currentUtterance = utterance;
                             if (isLast) resolve({
                                 constUtterancesHolder,
                                 lastUtterance: utterance
@@ -235,9 +235,12 @@ class SpeakTTS {
     }
 
     getCurrentUtteranceIndex() {
+        if (this.currentUtterance === null) {
+            return 0;
+        }
         return this.utterances.findIndex((row) => {
             return row.text === this.currentUtterance.text
-        });
+        }) + 1;
     }
 }
 
