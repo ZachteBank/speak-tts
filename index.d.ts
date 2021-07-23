@@ -32,6 +32,14 @@ export default class Speech {
         }>,
     }): Promise<void>;
 
+    playFromIndex(props: {
+        index: number,
+        queue?: boolean,
+        listeners?: Partial<{
+            [key in SpeechEvents]: SpeechSynthesisUtterance[key]
+        }>,
+    }): Promise<void>;
+
     static setLanguage(lang: string): void;
 
     static setVoice(voice: string): void;

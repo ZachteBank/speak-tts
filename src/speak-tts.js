@@ -177,9 +177,12 @@ class SpeakTTS {
                 Object.keys(listeners).forEach(listener => {
                     const fn = listeners[listener]
                     const newListener = (data) => {
-                        fn && fn(data)
-                        if (listener === 'onerror') {
+                        if (listener === 'onstart') {
+                            console.log("Set the current utterance on start")
                             reservedThis.currentUtterance = utterance;
+                        }
+                        if (listener === 'onerror') {
+                            // reservedThis.currentUtterance = utterance;
                             reject({
                                 constUtterancesHolder,
                                 lastUtterance: utterance,
@@ -187,16 +190,40 @@ class SpeakTTS {
                             })
                         }
                         if (listener === 'onend') {
-                            reservedThis.currentUtterance = utterance;
+                            // reservedThis.currentUtterance = utterance;
                             if (isLast) resolve({
                                 constUtterancesHolder,
                                 lastUtterance: utterance
                             })
                         }
+                        fn && fn(data)
                     }
                     utterance[listener] = newListener
                 })
                 this.utterances.push(utterance)
+                speechSynthesis.speak(utterance)
+            })
+        })
+    }
+
+
+    playFromIndex(data) {
+        return new Promise((resolve, reject) => {
+            const {index, listeners = {}, queue = true} = data
+
+
+            // Stop current speech
+            !queue && this.cancel()
+
+            if (!this.utterances || this.utterances.length === 0 || index < 0 || index > this.utterances.length) {
+                console.log(this.utterances, "Utterances")
+                console.log(index, "Index")
+                reject("Utterances is empty or index is out of range")
+            }
+            this.utterances.forEach((utterance, i) => {
+                if (i < index) {
+                    return;
+                }
                 speechSynthesis.speak(utterance)
             })
         })
@@ -236,11 +263,11 @@ class SpeakTTS {
 
     getCurrentUtteranceIndex() {
         if (this.currentUtterance === null) {
-            return 0;
+            return -1;
         }
         return this.utterances.findIndex((row) => {
             return row.text === this.currentUtterance.text
-        }) + 1;
+        });
     }
 }
 
